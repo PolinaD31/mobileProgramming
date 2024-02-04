@@ -1,62 +1,17 @@
-import { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, ScrollView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import History from './components/History';
+import Calculator from './components/Calculator';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [number1, setNumber1] = useState('')
-  const [number2, setNumber2] = useState('')
-  const [result, setResult] = useState('')
-  const [history, setHistory] =useState([])
-
-  const addNumbers = () => {
-    const addition = number1 + number2
-    setResult(addition)
-    setHistory([...history, {key: `${number1} + ${number2} = ${addition}`}])
-    setNumber1('')
-    setNumber2('')
-  }
-
-  const subtractNumbers = () => {
-    const subtraction = number1 - number2
-    setResult(subtraction)
-    setHistory([...history, {key: `${number1} - ${number2} = ${subtraction}`}])
-    setNumber1('')
-    setNumber2('')
-  }
-
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-      <TextInput
-        style={{ width: 200, borderColor: 'black', borderWidth: 1, marginBottom: 5 }}
-        keyboardType="numeric"
-        onChangeText={(text) => setNumber1(Number(text))}
-        value={String(number1)}
-      />
-      <TextInput
-        style={{ width: 200, borderColor: 'black', borderWidth: 1 }}
-        keyboardType="numeric"
-        onChangeText={(text) => setNumber2(Number(text))}
-        value={String(number2)}
-      />
-      <View style={{ flexDirection: 'row' }}>
-        <Button title="+" onPress={addNumbers} />
-        <Button title="-" onPress={subtractNumbers} />
-      </View>
-      <Text style={{fontWeight: 'bold', marginBottom: 5}} >History</Text>
-      <FlatList data={history} renderItem={({item}) => <Text>{item.key}</Text>}
-      keyExtractor={(item, index) => index.toString()} />
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Calculator" component={Calculator} />
+        <Stack.Screen name="History" component={History} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 100,
-  },
-});
